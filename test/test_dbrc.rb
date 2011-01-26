@@ -1,4 +1,5 @@
 require 'helper'
+require 'rdbi/driver/mock'
 
 class TestDBRC < Test::Unit::TestCase
   def test_01_roles

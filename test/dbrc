@@ -1,6 +1,43 @@
-# vim: ft=yaml
+# vim: ft=yaml et ts=2
 ---
 mock1:
   driver: Mock
   username: some_username
   password: some_password
+
+no_load_test:
+  driver: NoLoadTest
+  username: some_username
+  password: some_password
+  dbrc_load:
+  dbrc_ignored:
+    - this
+    - will
+    - be
+    - ignored
+
+implicit_load_test:
+  driver: ImplicitLoadTest
+  username: some_username
+  password: some_password
+
+explicit_load_test:
+  driver: ExplicitLoadTest
+  username: some_username
+  password: some_password
+  dbrc_load: adhoc/explicitloadtest
+
+explicit_load_multiple_test:
+  driver: ExplicitLoadMultipleTest
+  username: some_username
+  password: some_password
+  dbrc_load:
+    - adhoc/foo
+    - adhoc/bar
+    - adhoc/explicitloadmultipletest
+  dbrc_ignored:
+    - this
+    - will
+    - be
+    - ignored
+
