@@ -40,7 +40,15 @@ module RDBI # :nodoc:
       end
 
       driver = role_data.delete(:driver)
-      RDBI.connect(driver, role_data)
+      load_libs = role_data.delete(:dbrc_load) {
+                    ["rdbi/driver/#{driver.to_s.downcase}"]
+                  } || []
+      load_libs = [load_libs] unless load_libs.kind_of?(::Array)
+      load_libs.each do |l|
+        require l
+      end
+
+      RDBI.connect(driver, role_data.reject { |k,v| k.to_s =~ /^dbrc_/ })
     end
 
     #
