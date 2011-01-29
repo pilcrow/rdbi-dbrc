@@ -23,17 +23,17 @@ module RDBI # :nodoc:
   #
   #     ---
   #     memory_connection:
-  #       driver: SQLite3      # loads 'rdbi/driver/sqlite3'
+  #       driver: SQLite3      # implicitly load 'rdbi/driver/sqlite3'
   #       database: ":memory:"
   #     experimental:
-  #       driver: FauxSQL      # does not load '.../fauxsql' nor any driver
-  #       dbrc_load:
+  #       driver: FauxSQL
+  #       dbrc_load:           # do not load '.../fauxsql' (nor any driver)
   #       ...
   #     locally_patched:
   #       driver: Unreliable
   #       dbrc_load:
-  #         - rdbi/driver/unreliable
-  #         - local/patches/workaround
+  #         - rdbi/driver/unreliable    # loads driver explicitly
+  #         - local/patches/workaround  # then loads workaround
   #       ...
   #
   # RDBI::DBRC.connect(:memory_connection) would call RDBI.connect like so:
