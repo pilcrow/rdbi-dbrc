@@ -44,7 +44,10 @@ module RDBI # :nodoc:
   # .connect(:locally_patched) would load 'rdbi/driver/unreliable' followed
   # by 'local/patches/workaround' before issuing the underlying connect().
   #
-  # The configuration file lives by default in $HOME/.dbrc. Don't like that?
+  # If a block is given, it is executed with the newly connected dbh as its
+  # sole argument, just a for RDBI.connect.
+  #
+  # The configuration file is $HOME/.dbrc by default.  Don't like that?
   # Set the +DBRC+ environment variable:
   #
   #     DBRC=/tmp/dbrc my_rdbi_program.rb
@@ -53,7 +56,7 @@ module RDBI # :nodoc:
     #
     # Connect to the specified role.
     #
-    def self.connect(role)
+    def self.connect(role, &block)
       role_data = self.roles[role.to_sym]
 
       unless role_data
@@ -69,7 +72,8 @@ module RDBI # :nodoc:
         require l
       end
 
-      RDBI.connect(driver, role_data.reject { |k,v| k.to_s =~ /^dbrc_/ })
+      role_data.reject! { |k,v| k.to_s =~ /^dbrc_/ }
+      RDBI.connect(driver, role_data, &block)
     end
 
     #
@@ -80,7 +84,7 @@ module RDBI # :nodoc:
       RDBI::Pool.new(pool_name, self.roles[role], connections)
     end
 
-    # 
+    #
     # Obtain role information. Returns a hash of hashes.
     #
     def self.roles
